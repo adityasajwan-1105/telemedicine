@@ -1,13 +1,95 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
+import BrowseDoctors from './BrowseDoctors';
+import PatientAppointments from './PatientAppointments';
+import PatientPrescriptions from './PatientPrescriptions';
+import PatientHealthRecords from './PatientHealthRecords';
 
 function PatientDashboard() {
   const { user, logout } = useAuth();
+  const [activeView, setActiveView] = useState('dashboard');
 
   const handleLogout = () => {
     logout();
     window.location.href = '/';
   };
+
+  // Render different views
+  if (activeView === 'browse-doctors') {
+    return (
+      <div className="dashboard">
+        <header className="dashboard__header">
+          <div className="container dashboard__header-inner">
+            <div className="dashboard__brand">
+              <h1>TeleMed</h1>
+            </div>
+            <nav className="dashboard__nav">
+              <span className="dashboard__user">Welcome, {user?.name}</span>
+              <button className="btn btn-text" onClick={handleLogout}>Logout</button>
+            </nav>
+          </div>
+        </header>
+        <BrowseDoctors onBack={() => setActiveView('dashboard')} />
+      </div>
+    );
+  }
+
+  if (activeView === 'appointments') {
+    return (
+      <div className="dashboard">
+        <header className="dashboard__header">
+          <div className="container dashboard__header-inner">
+            <div className="dashboard__brand">
+              <h1>TeleMed</h1>
+            </div>
+            <nav className="dashboard__nav">
+              <span className="dashboard__user">Welcome, {user?.name}</span>
+              <button className="btn btn-text" onClick={handleLogout}>Logout</button>
+            </nav>
+          </div>
+        </header>
+        <PatientAppointments onBack={() => setActiveView('dashboard')} />
+      </div>
+    );
+  }
+
+  if (activeView === 'prescriptions') {
+    return (
+      <div className="dashboard">
+        <header className="dashboard__header">
+          <div className="container dashboard__header-inner">
+            <div className="dashboard__brand">
+              <h1>TeleMed</h1>
+            </div>
+            <nav className="dashboard__nav">
+              <span className="dashboard__user">Welcome, {user?.name}</span>
+              <button className="btn btn-text" onClick={handleLogout}>Logout</button>
+            </nav>
+          </div>
+        </header>
+        <PatientPrescriptions onBack={() => setActiveView('dashboard')} />
+      </div>
+    );
+  }
+
+  if (activeView === 'health-records') {
+    return (
+      <div className="dashboard">
+        <header className="dashboard__header">
+          <div className="container dashboard__header-inner">
+            <div className="dashboard__brand">
+              <h1>TeleMed</h1>
+            </div>
+            <nav className="dashboard__nav">
+              <span className="dashboard__user">Welcome, {user?.name}</span>
+              <button className="btn btn-text" onClick={handleLogout}>Logout</button>
+            </nav>
+          </div>
+        </header>
+        <PatientHealthRecords onBack={() => setActiveView('dashboard')} />
+      </div>
+    );
+  }
 
   return (
     <div className="dashboard">
@@ -39,25 +121,45 @@ function PatientDashboard() {
                 <div className="action-card__icon">👨‍⚕️</div>
                 <h4>Find a Doctor</h4>
                 <p>Search and book appointments with licensed physicians</p>
-                <button className="btn btn-primary">Browse Doctors</button>
+                <button 
+                  className="btn btn-primary" 
+                  onClick={() => setActiveView('browse-doctors')}
+                >
+                  Browse Doctors
+                </button>
               </div>
               <div className="action-card">
                 <div className="action-card__icon">📅</div>
                 <h4>My Appointments</h4>
                 <p>View and manage your upcoming appointments</p>
-                <button className="btn btn-outline">View Appointments</button>
+                <button 
+                  className="btn btn-outline"
+                  onClick={() => setActiveView('appointments')}
+                >
+                  View Appointments
+                </button>
               </div>
               <div className="action-card">
                 <div className="action-card__icon">💊</div>
                 <h4>Prescriptions</h4>
                 <p>Access your e-prescriptions and medication history</p>
-                <button className="btn btn-outline">View Prescriptions</button>
+                <button 
+                  className="btn btn-outline"
+                  onClick={() => setActiveView('prescriptions')}
+                >
+                  View Prescriptions
+                </button>
               </div>
               <div className="action-card">
                 <div className="action-card__icon">📋</div>
                 <h4>Health Records</h4>
                 <p>View your medical history and health records</p>
-                <button className="btn btn-outline">View Records</button>
+                <button 
+                  className="btn btn-outline"
+                  onClick={() => setActiveView('health-records')}
+                >
+                  View Records
+                </button>
               </div>
             </div>
           </section>
