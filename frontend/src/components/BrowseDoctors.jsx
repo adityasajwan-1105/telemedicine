@@ -28,7 +28,7 @@ function BrowseDoctors({ onBack }) {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/patient/doctors', {
+      const res = await fetch('http://localhost:4000/api/patient/doctors', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -98,7 +98,7 @@ function BrowseDoctors({ onBack }) {
     try {
       setBookingLoading(true);
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/appointments/book', {
+      const res = await fetch('http://localhost:4000/api/appointments/book', {
         method: 'POST',
         headers: {
           'Authorization': `Bearer ${token}`,

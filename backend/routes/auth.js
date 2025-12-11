@@ -105,15 +105,15 @@ router.post('/signup', async (req, res) => {
     const user = new User(userData);
     await user.save();
 
-    // Generate token
-    const token = generateToken(user._id);
+    // Generate token only for patients (doctors must be approved first)
+    const token = role === 'patient' ? generateToken(user._id) : null;
 
     res.status(201).json({
       success: true,
       message: role === 'patient' 
         ? 'Patient account created successfully' 
         : 'Doctor account created successfully. Please wait for admin approval before logging in.',
-      token: role === 'patient' ? token : null, // Don't return token for doctors until approved
+      token,
       user: {
         id: user._id,
         name: user.name,
@@ -137,6 +137,24 @@ router.post('/signup', async (req, res) => {
     });
   } catch (error) {
     console.error('Signup error:', error);
+
+    // Handle common, more specific error cases to give clearer feedback
+    if (error.code === 11000) {
+      // Duplicate key (e.g., email already exists)
+      return res.status(400).json({
+        success: false,
+        message: 'User with this email already exists'
+      });
+    }
+
+    if (error.name === 'ValidationError') {
+      const firstError = Object.values(error.errors)[0];
+      return res.status(400).json({
+        success: false,
+        message: firstError?.message || 'Invalid data. Please check your input.'
+      });
+    }
+
     res.status(500).json({
       success: false,
       message: 'Server error. Please try again later.',

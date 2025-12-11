@@ -16,10 +16,10 @@ function PatientHealthRecords({ onBack }) {
       
       // Fetch appointments and prescriptions
       const [appointmentsRes, prescriptionsRes] = await Promise.all([
-        fetch('http://localhost:5000/api/appointments/patient', {
+        fetch('http://localhost:4000/api/appointments/patient', {
           headers: { 'Authorization': `Bearer ${token}` }
         }),
-        fetch('http://localhost:5000/api/prescriptions/patient', {
+        fetch('http://localhost:4000/api/prescriptions/patient', {
           headers: { 'Authorization': `Bearer ${token}` }
         })
       ]);

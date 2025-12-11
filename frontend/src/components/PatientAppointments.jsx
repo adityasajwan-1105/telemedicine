@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 function PatientAppointments({ onBack }) {
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchAppointments();
@@ -12,7 +14,7 @@ function PatientAppointments({ onBack }) {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/appointments/patient', {
+      const res = await fetch('http://localhost:4000/api/appointments/patient', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
@@ -39,7 +41,7 @@ function PatientAppointments({ onBack }) {
 
     try {
       const token = localStorage.getItem('token');
-      const res = await fetch(`http://localhost:5000/api/appointments/${appointmentId}/cancel`, {
+      const res = await fetch(`http://localhost:4000/api/appointments/${appointmentId}/cancel`, {
         method: 'PATCH',
         headers: {
           'Authorization': `Bearer ${token}`,
@@ -143,6 +145,15 @@ function PatientAppointments({ onBack }) {
                     >
                       Cancel Appointment
                     </button>
+                    {appointment.status === 'confirmed' && (
+                      <button
+                        className="btn btn-primary"
+                        onClick={() => navigate(`/consult/${appointment._id}`)}
+                        style={{ marginLeft: '0.75rem' }}
+                      >
+                        Join Video Visit
+                      </button>
+                    )}
                   </div>
                 )}
               </div>

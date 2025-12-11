@@ -282,6 +282,45 @@ router.patch('/:appointmentId/cancel', isAuthenticated, async (req, res) => {
   }
 });
 
+// Get details for a specific appointment (Patient or Doctor)
+router.get('/:appointmentId', isAuthenticated, async (req, res) => {
+  try {
+    const { appointmentId } = req.params;
+    const appointment = await Appointment.findById(appointmentId)
+      .populate('patient', 'name email phone')
+      .populate('doctor', 'name email specialization hospital');
+
+    if (!appointment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Appointment not found'
+      });
+    }
+
+    const isPatient = appointment.patient?._id?.toString() === req.user._id.toString();
+    const isDoctor = appointment.doctor?._id?.toString() === req.user._id.toString();
+    const isAdmin = req.user.role === 'admin';
+
+    if (!isPatient && !isDoctor && !isAdmin) {
+      return res.status(403).json({
+        success: false,
+        message: 'You do not have access to this appointment'
+      });
+    }
+
+    res.json({
+      success: true,
+      appointment
+    });
+  } catch (error) {
+    console.error('Error fetching appointment details:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Server error'
+    });
+  }
+});
+
 module.exports = router;
 
 

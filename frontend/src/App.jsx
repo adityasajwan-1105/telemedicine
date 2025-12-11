@@ -6,6 +6,7 @@ import PatientDashboard from './components/PatientDashboard.jsx';
 import DoctorDashboard from './components/DoctorDashboard.jsx';
 import AdminDashboard from './components/AdminDashboard.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import VideoCallRoom from './components/VideoCallRoom.jsx';
 
 function App() {
   const { user } = useAuth();
@@ -26,6 +27,14 @@ function App() {
             ) : (
               <Navigate to="/" replace />
             )}
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/consult/:appointmentId"
+        element={
+          <ProtectedRoute>
+            <VideoCallRoom />
           </ProtectedRoute>
         }
       />

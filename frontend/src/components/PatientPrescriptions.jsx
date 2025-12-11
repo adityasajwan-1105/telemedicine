@@ -13,7 +13,7 @@ function PatientPrescriptions({ onBack }) {
     try {
       setLoading(true);
       const token = localStorage.getItem('token');
-      const res = await fetch('http://localhost:5000/api/prescriptions/patient', {
+      const res = await fetch('http://localhost:4000/api/prescriptions/patient', {
         headers: {
           'Authorization': `Bearer ${token}`
         }
